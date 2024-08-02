@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <title>New Tab 🗿</title>
+  </head>
+  <body>
+    <header></header>
+
+    <div class="col col1">
+      <div class="task">
+        <div class="taskHeader">
+          <h1>دست نویس</h1>
+          <button id="blurButton">
+            <svg
+              id="blurIcon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 -960 960 960"
+              height="24px"
+              width="24px"
+              fill="#111"
+            >
+              <path
+                d="M764-84 624-222q-35 11-71 16.5t-73 5.5q-134 0-245-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q22-39 47-76t58-66l-83-84q-11-11-11-27.5T84-820q11-11 28-11t28 11l680 680q11 11 11.5 27.5T820-84q-11 11-28 11t-28-11ZM480-320q11 0 21-1t20-4L305-541q-3 10-4 20t-1 21q0 75 52.5 127.5T480-320Zm0-480q134 0 245.5 72.5T900-537q5 8 7.5 17.5T910-500q0 10-2 19.5t-7 17.5q-19 37-42.5 70T806-331q-14 14-33 13t-33-15l-80-80q-7-7-9-16.5t1-19.5q4-13 6-25t2-26q0-75-52.5-127.5T480-680q-14 0-26 2t-25 6q-10 3-20 1t-17-9l-33-33q-19-19-12.5-44t31.5-32q25-5 50.5-8t51.5-3Zm79 226q11 13 18.5 28.5T587-513q1 8-6 11t-13-3l-82-82q-6-6-2.5-13t11.5-7q19 2 35 10.5t29 22.5Z"
+              />
+            </svg>
+            <svg
+              id="unblurIcon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 15 11"
+              data-v-1d882971=""
+              height="24px"
+              width="24px"
+              fill="#111"
+            >
+              <path
+                d="M7.64941 0.155762C4.4676 0.155762 1.75032 2.2291 0.649414 5.15576C1.75032 8.08243 4.4676 10.1558 7.64941 10.1558C10.8312 10.1558 13.5485 8.08243 14.6494 5.15576C13.5485 2.2291 10.8312 0.155762 7.64941 0.155762ZM7.64941 8.4891C5.89305 8.4891 4.4676 6.99576 4.4676 5.15576C4.4676 3.31576 5.89305 1.82243 7.64941 1.82243C9.40578 1.82243 10.8312 3.31576 10.8312 5.15576C10.8312 6.99576 9.40578 8.4891 7.64941 8.4891ZM7.64941 3.15576C6.59305 3.15576 5.74032 4.0491 5.74032 5.15576C5.74032 6.26243 6.59305 7.15576 7.64941 7.15576C8.70578 7.15576 9.55851 6.26243 9.55851 5.15576C9.55851 4.0491 8.70578 3.15576 7.64941 3.15576Z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div class="taskBody" id="taskBody">
+          <div id="taskList"></div>
+          <div id="taskTemplate" class="taskItem" style="display: none">
+            <div class="taskInfo">
+              <input type="checkbox" class="task-done" />
+              <span class="task-text"></span>
+            </div>
+            <div class="taskBtns">
+              <button id="menuButton" class="menu-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="#111"
+                >
+                  <path
+                    d="M480-280q-33 0-56.5-23.5T400-360q0-33 23.5-56.5T480-440q33 0 56.5 23.5T560-360q0 33-23.5 56.5T480-280Zm0-200q-33 0-56.5-23.5T400-560q0-33 23.5-56.5T480-640q33 0 56.5 23.5T560-560q0 33-23.5 56.5T480-480Zm0-200q-33 0-56.5-23.5T400-760q0-33 23.5-56.5T480-840q33 0 56.5 23.5T560-760q0 33-23.5 56.5T480-680Z"
+                  />
+                </svg>
+              </button>
+              <div id="menu" class="popup-menu">
+                <button class="edit-task">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#111"
+                  >
+                    <path
+                      d="M160-120q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm544-528 56-56-56-56-56 56 56 56Z"
+                    />
+                  </svg>
+                </button>
+                <button class="delete-task">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#111"
+                  >
+                    <path
+                      d="M280-120q-33 0-56.5-23.5T200-200v-520q-17 0-28.5-11.5T160-760q0-17 11.5-28.5T200-800h160q0-17 11.5-28.5T400-840h160q17 0 28.5 11.5T600-800h160q17 0 28.5 11.5T800-760q0 17-11.5 28.5T760-720v520q0 33-23.5 56.5T680-120H280Zm120-160q17 0 28.5-11.5T440-320v-280q0-17-11.5-28.5T400-640q-17 0-28.5 11.5T360-600v280q0 17 11.5 28.5T400-280Zm160 0q17 0 28.5-11.5T600-320v-280q0-17-11.5-28.5T560-640q-17 0-28.5 11.5T520-600v280q0 17 11.5 28.5T560-280Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="taskFooter">
+          <div class="priority">
+            <label><input type="checkbox" id="priorityGreen" /> Green</label>
+            <label><input type="checkbox" id="priorityYellow" /> Yellow</label>
+            <label><input type="checkbox" id="priorityRed" /> Red</label>
+          </div>
+          <input type="text" id="taskInput" placeholder="تسک جدید" />
+          <button id="addTaskButton">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 -960 960 960"
+              height="25px"
+              width="25px"
+              fill="#fff"
+            >
+              <path
+                d="M423.41-424.17H221.24q-23.67 0-40.13-16.63-16.46-16.62-16.46-39.96 0-23.67 16.46-40.13t40.13-16.46h202.17v-202.41q0-23.34 16.63-39.96 16.62-16.63 39.96-16.63t39.96 16.63q16.63 16.62 16.63 39.96v202.41h202.17q23.67 0 40.13 16.46t16.46 40.01q0 23.55-16.46 40.13-16.46 16.58-40.13 16.58H536.59V-222q0 23.34-16.63 39.96-16.62 16.63-39.96 16.63t-39.96-16.63q-16.63-16.62-16.63-39.96v-202.17Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col2">
+      <div class="search">
+        <div class="searchSection">
+          <svg
+            class="google-icon"
+            width="32"
+            height="31"
+            viewBox="0 0 32 31"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M29.7979 15.7424C29.7979 14.6343 29.7035 13.8257 29.4991 12.9872H16.2087V17.9885H24.0099C23.8527 19.2313 23.0033 21.1031 21.1159 22.3609L21.0894 22.5283L25.2916 25.6276L25.5827 25.6552C28.2565 23.3043 29.7979 19.8453 29.7979 15.7424Z"
+              fill="#4285F4"
+            ></path>
+            <path
+              d="M16.2077 28.9196C20.0296 28.9196 23.2381 27.7216 25.5817 25.6552L21.1149 22.3608C19.9196 23.1545 18.3153 23.7085 16.2077 23.7085C12.4645 23.7085 9.28739 21.3576 8.15486 18.1082L7.98885 18.1216L3.6194 21.3411L3.56226 21.4923C5.89 25.8947 10.6714 28.9196 16.2077 28.9196Z"
+              fill="#34A853"
+            ></path>
+            <path
+              d="M8.1562 18.1084C7.85737 17.2699 7.68442 16.3714 7.68442 15.443C7.68442 14.5146 7.85737 13.6162 8.14047 12.7776L8.13256 12.599L3.70834 9.32788L3.56358 9.39343C2.6042 11.2203 2.05371 13.2718 2.05371 15.443C2.05371 17.6142 2.6042 19.6656 3.56358 21.4925L8.1562 18.1084Z"
+              fill="#FBBC05"
+            ></path>
+            <path
+              d="M16.2078 7.17728C18.8658 7.17728 20.6588 8.27038 21.6812 9.18386L25.6762 5.47027C23.2226 3.29904 20.0297 1.96634 16.2078 1.96634C10.6714 1.96634 5.89001 4.99108 3.56226 9.39341L8.13916 12.7776C9.28743 9.52823 12.4645 7.17728 16.2078 7.17728Z"
+              fill="#EB4335"
+            ></path>
+          </svg>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="جستجو در گوگل"
+            autocomplete="off"
+          />
+          <button id="searchButton">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#e8eaed"
+            >
+              <path
+                d="M378.09-314.5q-111.16 0-188.33-77.17-77.17-77.18-77.17-188.33t77.17-188.33q77.17-77.17 188.33-77.17 111.15 0 188.32 77.17 77.18 77.18 77.18 188.33 0 44.48-13.52 83.12-13.53 38.64-36.57 68.16l222.09 222.33q12.67 12.91 12.67 31.94 0 19.04-12.91 31.71-12.68 12.67-31.83 12.67t-31.82-12.67L529.85-364.59q-29.76 23.05-68.64 36.57-38.88 13.52-83.12 13.52Zm0-91q72.84 0 123.67-50.83 50.83-50.82 50.83-123.67t-50.83-123.67q-50.83-50.83-123.67-50.83-72.85 0-123.68 50.83-50.82 50.82-50.82 123.67t50.82 123.67q50.83 50.83 123.68 50.83Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div id="searchResults"></div>
+
+      <div id="bookmarksSection" class="bookmarks-section">
+        <div id="bookmarks" dir="ltr">
+          <button id="addBookmark">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 -960 960 960"
+              height="35px"
+              width="35px"
+              fill="#9b9b9b"
+            >
+              <path
+                d="M423.41-424.17H221.24q-23.67 0-40.13-16.63-16.46-16.62-16.46-39.96 0-23.67 16.46-40.13t40.13-16.46h202.17v-202.41q0-23.34 16.63-39.96 16.62-16.63 39.96-16.63t39.96 16.63q16.63 16.62 16.63 39.96v202.41h202.17q23.67 0 40.13 16.46t16.46 40.01q0 23.55-16.46 40.13-16.46 16.58-40.13 16.58H536.59V-222q0 23.34-16.63 39.96-16.62 16.63-39.96 16.63t-39.96-16.63q-16.63-16.62-16.63-39.96v-202.17Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="bookmarkModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h3>Add Bookmark</h3>
+          <label for="bookmarkUrl">URL:</label>
+          <input type="text" id="bookmarkUrl" placeholder="Enter URL" />
+          <label for="bookmarkName">Name:</label>
+          <input type="text" id="bookmarkName" placeholder="Enter Name" />
+          <label for="bookmarkEmoji">Emoji:</label>
+          <input type="text" id="bookmarkEmoji" placeholder="Enter Emoji" />
+          <button id="saveBookmark">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col3">
+      <div class="info-section">
+        <div id="dateTimeInfo">
+          <h2 class="time"></h2>
+          <h3 class="jdate"></h3>
+          <p class="date"></p>
+        </div>
+
+        <hr color="#333" />
+
+        <div id="weatherSection">
+          <div id="weatherInfo"></div>
+        </div>
+      </div>
+
+      <div class="alarm-clock">
+        <div class="set-alarm">
+          <label for="alarmTime">Set Alarm Time:</label>
+          <input type="time" id="alarmTime" />
+          <button id="setAlarmButton">تنظیم</button>
+          <button id="stopAlarmButton">استاپ</button>
+        </div>
+        <audio
+          id="alarmSound"
+          src="assets/sounds/mixkit-retro-game-emergency-alarm-1000.wav"
+          preload="auto"
+        ></audio>
+      </div>
+
+      <div id="toastContainer"></div>
+
+      <div id="calendarSection" class="calendar-section">
+        <div id="calendarControls">
+          <button id="prevMonth">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 -960 960 960"
+              height="12px"
+              width="12px"
+              fill="#e8eaed"
+            >
+              <path
+                d="M579-480 285-774q-15-15-14.5-35.5T286-845q15-15 35.5-15t35.5 15l307 308q12 12 18 27t6 30q0 15-6 30t-18 27L356-115q-15 15-35 14.5T286-116q-15-15-15-35.5t15-35.5l293-293Z"
+              />
+            </svg>
+          </button>
+          <span id="calendarTitle"></span>
+          <button id="nextMonth">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 -960 960 960"
+              height="12px"
+              width="12px"
+              fill="#e8eaed"
+            >
+              <path
+                d="m142-480 294 294q15 15 14.5 35T435-116q-15 15-35 15t-35-15L57-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T436-844q15 15 15 35t-15 35L142-480Z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <table id="calendarTable">
+          <thead>
+            <tr>
+              <th>ش</th>
+              <th>ی</th>
+              <th>د</th>
+              <th>س</th>
+              <th>چ</th>
+              <th>پ</th>
+              <th>ج</th>
+            </tr>
+          </thead>
+
+          <tbody id="calendarBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="assets/libs/jalaali.js"></script>
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>
