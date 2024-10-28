@@ -22,12 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const bookmarkName = document.getElementById("bookmarkName");
   const bookmarkEmoji = document.getElementById("bookmarkEmoji");
 
-  const priorities = {
-    green: document.getElementById("priorityGreen"),
-    yellow: document.getElementById("priorityYellow"),
-    red: document.getElementById("priorityRed"),
-  };
-
   const weatherApiKey = "3045dd712ffe6e702e3245525ac7fa38";
   const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=Tehran&units=metric&appid=${weatherApiKey}`;
 
@@ -85,13 +79,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function loadTasks() {
     getTasksFromLocalStorage().forEach((task) =>
-      addTaskToList(task.text, task.priority, task.done)
+      addTaskToList(task.text, task.done)
     );
   }
 
-  function saveTask(text, priority, done = false) {
+  function saveTask(text, done = false) {
     const tasks = getTasksFromLocalStorage();
-    tasks.push({ text, priority, done });
+    tasks.push({ text, done });
     saveTasksToLocalStorage(tasks);
   }
 
@@ -260,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  function addTaskToList(text, priority, done = false) {
+  function addTaskToList(text, done = false) {
     const taskDiv = document.getElementById("taskTemplate").cloneNode(true);
     taskDiv.style.display = "";
     taskDiv.querySelector(".task-text").textContent = text;
@@ -270,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     taskDoneCheckbox.addEventListener("change", function () {
       const taskIndex = [...taskList.children].indexOf(taskDiv);
-      updateTask(taskIndex, { text, priority, done: this.checked });
+      updateTask(taskIndex, { text, done: this.checked });
       taskDiv.classList.toggle("done", this.checked);
     });
 
@@ -294,14 +288,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const taskText = taskInput.value.trim();
     if (!taskText) return;
 
-    let priority =
-      Object.keys(priorities).find((key) => priorities[key].checked) || "";
 
-    addTaskToList(taskText, priority);
-    saveTask(taskText, priority);
+    addTaskToList(taskText);
+    saveTask(taskText);
 
     taskInput.value = "";
-    Object.values(priorities).forEach((priority) => (priority.checked = false));
   });
 
   searchButton.addEventListener("click", () => {

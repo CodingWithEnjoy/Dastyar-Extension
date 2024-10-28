@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="assets/css/style.css" />
     <title>New Tab 🗿</title>
   </head>
-  <body>
-    <header></header>
+  <body id="body">
+    <!-- <header></header> -->
 
     <div class="col col1">
       <div class="task">
@@ -55,7 +55,7 @@
                   height="24px"
                   viewBox="0 -960 960 960"
                   width="24px"
-                  fill="#111"
+                  fill="#fff"
                 >
                   <path
                     d="M480-280q-33 0-56.5-23.5T400-360q0-33 23.5-56.5T480-440q33 0 56.5 23.5T560-360q0 33-23.5 56.5T480-280Zm0-200q-33 0-56.5-23.5T400-560q0-33 23.5-56.5T480-640q33 0 56.5 23.5T560-560q0 33-23.5 56.5T480-480Zm0-200q-33 0-56.5-23.5T400-760q0-33 23.5-56.5T480-840q33 0 56.5 23.5T560-760q0 33-23.5 56.5T480-680Z"
@@ -63,42 +63,18 @@
                 </svg>
               </button>
               <div id="menu" class="popup-menu">
-                <button class="edit-task">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#111"
-                  >
-                    <path
-                      d="M160-120q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm544-528 56-56-56-56-56 56 56 56Z"
-                    />
-                  </svg>
-                </button>
-                <button class="delete-task">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#111"
-                  >
-                    <path
-                      d="M280-120q-33 0-56.5-23.5T200-200v-520q-17 0-28.5-11.5T160-760q0-17 11.5-28.5T200-800h160q0-17 11.5-28.5T400-840h160q17 0 28.5 11.5T600-800h160q17 0 28.5 11.5T800-760q0 17-11.5 28.5T760-720v520q0 33-23.5 56.5T680-120H280Zm120-160q17 0 28.5-11.5T440-320v-280q0-17-11.5-28.5T400-640q-17 0-28.5 11.5T360-600v280q0 17 11.5 28.5T400-280Zm160 0q17 0 28.5-11.5T600-320v-280q0-17-11.5-28.5T560-640q-17 0-28.5 11.5T520-600v280q0 17 11.5 28.5T560-280Z"
-                    />
-                  </svg>
-                </button>
+                <button class="edit-task"><p>ویرایش</p></button>
+                <button class="delete-task"><p>حذف</p></button>
               </div>
             </div>
           </div>
         </div>
         <div class="taskFooter">
-          <div class="priority">
+          <!-- <div class="priority">
             <label><input type="checkbox" id="priorityGreen" /> Green</label>
             <label><input type="checkbox" id="priorityYellow" /> Yellow</label>
             <label><input type="checkbox" id="priorityRed" /> Red</label>
-          </div>
+          </div> -->
           <input type="text" id="taskInput" placeholder="تسک جدید" />
           <button id="addTaskButton">
             <svg
@@ -166,17 +142,17 @@
           </button>
         </div>
       </div>
-      <div id="searchResults"></div>
+      <!-- <div id="searchResults"></div> -->
 
       <div id="bookmarksSection" class="bookmarks-section">
-        <div id="bookmarks" dir="ltr">
+        <div id="bookmarks" dir="rtl">
           <button id="addBookmark">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 -960 960 960"
               height="35px"
               width="35px"
-              fill="#9b9b9b"
+              fill="#ffffff"
             >
               <path
                 d="M423.41-424.17H221.24q-23.67 0-40.13-16.63-16.46-16.62-16.46-39.96 0-23.67 16.46-40.13t40.13-16.46h202.17v-202.41q0-23.34 16.63-39.96 16.62-16.63 39.96-16.63t39.96 16.63q16.63 16.62 16.63 39.96v202.41h202.17q23.67 0 40.13 16.46t16.46 40.01q0 23.55-16.46 40.13-16.46 16.58-40.13 16.58H536.59V-222q0 23.34-16.63 39.96-16.62 16.63-39.96 16.63t-39.96-16.63q-16.63-16.62-16.63-39.96v-202.17Z"
@@ -188,15 +164,14 @@
 
       <div id="bookmarkModal" class="modal">
         <div class="modal-content">
-          <span class="close">&times;</span>
-          <h3>Add Bookmark</h3>
-          <label for="bookmarkUrl">URL:</label>
-          <input type="text" id="bookmarkUrl" placeholder="Enter URL" />
-          <label for="bookmarkName">Name:</label>
-          <input type="text" id="bookmarkName" placeholder="Enter Name" />
-          <label for="bookmarkEmoji">Emoji:</label>
-          <input type="text" id="bookmarkEmoji" placeholder="Enter Emoji" />
-          <button id="saveBookmark">Save</button>
+          <div class="modalInfo">
+            <span class="close">&times;</span>
+            <h3>اضافه کردن بوکمارک</h3>
+          </div>
+          <input type="text" id="bookmarkName" placeholder="نام وبسایت" />
+          <input type="text" id="bookmarkUrl" placeholder="لینک وبسایت" />
+          <input type="text" id="bookmarkEmoji" placeholder="ایموجی" />
+          <button id="saveBookmark">ذخیره</button>
         </div>
       </div>
     </div>
@@ -218,7 +193,7 @@
 
       <div class="alarm-clock">
         <div class="set-alarm">
-          <label for="alarmTime">Set Alarm Time:</label>
+          <label for="alarmTime">تنظیم کردن آلارم گنگ :)</label>
           <input type="time" id="alarmTime" />
           <button id="setAlarmButton">تنظیم</button>
           <button id="stopAlarmButton">استاپ</button>
@@ -266,13 +241,13 @@
         <table id="calendarTable">
           <thead>
             <tr>
-              <th>ش</th>
               <th>ی</th>
               <th>د</th>
               <th>س</th>
               <th>چ</th>
               <th>پ</th>
               <th>ج</th>
+              <th>ش</th>
             </tr>
           </thead>
 
