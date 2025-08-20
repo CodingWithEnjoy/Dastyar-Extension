@@ -1,26 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const taskInput = document.getElementById("taskInput");
-  const addTaskButton = document.getElementById("addTaskButton");
-  const blurButton = document.getElementById("blurButton");
-  const blurIcon = document.getElementById("blurIcon");
-  const unblurIcon = document.getElementById("unblurIcon");
-  const taskList = document.getElementById("taskList");
-  const taskBody = document.getElementById("taskBody");
-  const searchInput = document.getElementById("searchInput");
-  const searchButton = document.getElementById("searchButton");
-  const searchResults = document.getElementById("searchResults");
-  const weatherInfo = document.getElementById("weatherInfo");
-  const dateTimeInfo = document.getElementById("dateTimeInfo");
-  const calendarTitle = document.getElementById("calendarTitle");
-  const calendarBody = document.getElementById("calendarBody");
-  const bookmarksContainer = document.getElementById("bookmarks");
-  const addBookmarkButton = document.getElementById("addBookmark");
-  const bookmarkModal = document.getElementById("bookmarkModal");
-  const closeModalButton = document.querySelector(".close");
-  const saveBookmarkButton = document.getElementById("saveBookmark");
-  const bookmarkUrl = document.getElementById("bookmarkUrl");
-  const bookmarkName = document.getElementById("bookmarkName");
-  const bookmarkEmoji = document.getElementById("bookmarkEmoji");
+  const $ = (id) => document.getElementById(id);
+  const $$ = (selector) => document.querySelector(selector);
+
+  const taskInput = $("taskInput");
+  const addTaskButton = $("addTaskButton");
+  const blurButton = $("blurButton");
+  const blurIcon = $("blurIcon");
+  const unblurIcon = $("unblurIcon");
+  const taskList = $("taskList");
+  const taskBody = $("taskBody");
+  const searchInput = $("searchInput");
+  const searchButton = $("searchButton");
+  const searchResults = $("searchResults");
+  const weatherInfo = $("weatherInfo");
+  const dateTimeInfo = $("dateTimeInfo");
+  const calendarTitle = $("calendarTitle");
+  const calendarBody = $("calendarBody");
+  const bookmarksContainer = $("bookmarks");
+  const addBookmarkButton = $("addBookmark");
+  const bookmarkModal = $("bookmarkModal");
+  const closeModalButton = $$(".close");
+  const saveBookmarkButton = $("saveBookmark");
+  const bookmarkUrl = $("bookmarkUrl");
+  const bookmarkName = $("bookmarkName");
+  const bookmarkEmoji = $("bookmarkEmoji");
 
   const weatherApiKey = "3045dd712ffe6e702e3245525ac7fa38";
   const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=Tehran&units=metric&appid=${weatherApiKey}`;
@@ -35,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     thunderstorm: "⛈️",
     snow: "❄️",
     mist: "🌫️",
+    haze: "⚠️",
   };
 
   const weatherTranslations = {
@@ -47,12 +51,13 @@ document.addEventListener("DOMContentLoaded", () => {
     thunderstorm: "طوفان رعد و برق",
     snow: "برف",
     mist: "مه",
+    haze: "غبار آلود",
   };
 
   const temperatureDescriptions = {
-    "0-5": "هوا نا جوانمردانه سرده 😶‍🌫️",
-    "6-15": "هوا کمی سرده",
-    "16-25": "هوا مطبوعه",
+    "0-5": "هوا سردههه 😶‍🌫️",
+    "6-15": "چایی میچسبه 🍵",
+    "16-25": "هوا اوکیه",
     "26-35": "هوا گرمهههه 🫠",
     "36-100": "هوا آتیشه 💀",
   };
@@ -72,15 +77,21 @@ document.addEventListener("DOMContentLoaded", () => {
     "اسفند",
   ];
 
-  const getTasksFromLocalStorage = () =>
-    JSON.parse(localStorage.getItem("tasks")) || [];
+  const getTasksFromLocalStorage = () => {
+    try {
+      return JSON.parse(localStorage.getItem("tasks")) || [];
+    } catch {
+      return [];
+    }
+  };
   const saveTasksToLocalStorage = (tasks) =>
     localStorage.setItem("tasks", JSON.stringify(tasks));
 
   function loadTasks() {
-    getTasksFromLocalStorage().forEach((task) =>
-      addTaskToList(task.text, task.done)
-    );
+    const tasks = getTasksFromLocalStorage();
+    for (const task of tasks) {
+      addTaskToList(task.text, task.done);
+    }
   }
 
   function saveTask(text, done = false) {
@@ -91,14 +102,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateTask(index, task) {
     const tasks = getTasksFromLocalStorage();
-    tasks[index] = task;
-    saveTasksToLocalStorage(tasks);
+    if (index > -1) {
+      tasks[index] = task;
+      saveTasksToLocalStorage(tasks);
+    }
   }
 
   function deleteTask(index) {
     const tasks = getTasksFromLocalStorage();
-    tasks.splice(index, 1);
-    saveTasksToLocalStorage(tasks);
+    if (index > -1) {
+      tasks.splice(index, 1);
+      saveTasksToLocalStorage(tasks);
+    }
   }
 
   function loadBlurStatus() {
@@ -108,37 +123,37 @@ document.addEventListener("DOMContentLoaded", () => {
     unblurIcon.style.display = isBlurred ? "inline" : "none";
   }
 
-  function getTemperatureDescription(temp) {
+  const getTemperatureDescription = (temp) => {
     if (temp >= 0 && temp <= 5) return temperatureDescriptions["0-5"];
-    if (temp >= 6 && temp <= 15) return temperatureDescriptions["6-15"];
-    if (temp >= 16 && temp <= 25) return temperatureDescriptions["16-25"];
-    if (temp >= 26 && temp <= 35) return temperatureDescriptions["26-35"];
+    if (temp <= 15) return temperatureDescriptions["6-15"];
+    if (temp <= 25) return temperatureDescriptions["16-25"];
+    if (temp <= 35) return temperatureDescriptions["26-35"];
     if (temp >= 36) return temperatureDescriptions["36-100"];
     return "دمای نامشخص";
-  }
+  };
 
   async function fetchWeather() {
     try {
-      const response = await fetch(weatherUrl);
-      const data = await response.json();
-      const description = data.weather[0].description;
+      const res = await fetch(weatherUrl);
+      const data = await res.json();
+      const { description } = data.weather[0];
       const emoji = weatherEmojis[description] || "🌈";
       const translation = weatherTranslations[description] || description;
       const temp = Math.round(data.main.temp);
       const tempDescription = getTemperatureDescription(temp);
+
       weatherInfo.innerHTML = `
         <h2>${temp}° ${emoji}</h2>
         <h3>${tempDescription}</h3>
         <p>${translation} . ${data.main.humidity}%</p>
       `;
-    } catch (error) {
-      console.error("Error fetching weather data:", error);
+    } catch (err) {
+      console.error("Error fetching weather:", err);
     }
   }
 
   function updateDateTime() {
     const now = new Date();
-
     const jalaliDate = jalaali.toJalaali(
       now.getFullYear(),
       now.getMonth() + 1,
@@ -150,24 +165,21 @@ document.addEventListener("DOMContentLoaded", () => {
       month: "long",
       day: "numeric",
     });
-
     const jalaliDateString = `${jalaliDate.jd} ${
       persianMonths[jalaliDate.jm - 1]
     } ${jalaliDate.jy}`;
+    const timeString = `${String(now.getHours() % 12 || 12).padStart(
+      2,
+      "0"
+    )}:${String(now.getMinutes()).padStart(2, "0")}`;
 
-    let hours = now.getHours();
-    const minutes = now.getMinutes();
+    const dateEl = dateTimeInfo.querySelector(".date");
+    const jdateEl = dateTimeInfo.querySelector(".jdate");
+    const timeEl = dateTimeInfo.querySelector(".time");
 
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-
-    const timeString = `${String(hours).padStart(2, "0")}:${String(
-      minutes
-    ).padStart(2, "0")}`;
-
-    dateTimeInfo.querySelector(".date").textContent = `${dateString}`;
-    dateTimeInfo.querySelector(".jdate").textContent = `${jalaliDateString}`;
-    dateTimeInfo.querySelector(".time").textContent = `${timeString}`;
+    if (dateEl) dateEl.textContent = dateString;
+    if (jdateEl) jdateEl.textContent = jalaliDateString;
+    if (timeEl) timeEl.textContent = timeString;
   }
 
   let currentMonth = new Date().getMonth();
@@ -288,7 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const taskText = taskInput.value.trim();
     if (!taskText) return;
 
-
     addTaskToList(taskText);
     saveTask(taskText);
 
@@ -382,62 +393,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  const alarmTimeInput = document.getElementById("alarmTime");
-  const setAlarmButton = document.getElementById("setAlarmButton");
-  const stopAlarmButton = document.getElementById("stopAlarmButton");
-  const alarmSound = document.getElementById("alarmSound");
-  const toastContainer = document.getElementById("toastContainer");
+  const urls = [
+    "https://api.widgetify.ir/currencies/GRAM",
+    "https://api.widgetify.ir/currencies/USD",
+    "https://api.widgetify.ir/currencies/EUR",
+    "https://api.widgetify.ir/currencies/TRY",
+    "https://api.widgetify.ir/currencies/AED",
+  ];
 
-  let alarmTime = null;
+  async function fetchCurrencies() {
+    const container = document.getElementById("currencies");
+    container.innerHTML = "";
 
-  function showToast(message) {
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.textContent = message;
-    toastContainer.appendChild(toast);
+    for (const url of urls) {
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
 
-    setTimeout(() => {
-      toast.classList.add("show");
-    }, 100);
+        const div = document.createElement("div");
+        div.classList.add("currency");
+        div.innerHTML = `
+            <div>
+              <img src="${data.icon}" alt="${data.name.en}" />
 
-    setTimeout(() => {
-      toast.classList.remove("show");
-      toast.classList.add("hide");
+              <div class="currency-info">
+                <span class="name">${data.name.fa}:</span>
+                <span class="price"> ${data.price.toLocaleString()} تومان </span>
+              </div>
+            </div>
 
-      setTimeout(() => {
-        toastContainer.removeChild(toast);
-      }, 500);
-    }, 3000);
-  }
-
-  function updateTime() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const currentTime = `${hours}:${minutes}`;
-
-    if (alarmTime && currentTime === alarmTime) {
-      alarmSound.play();
-      alarmTime = null;
+            <span class="change ${data.changePercentage >= 0 ? "green" : "red"}">
+              ${data.changePercentage >= 0 ? "+" : ""}${data.changePercentage}%
+            </span>
+          `;
+        container.appendChild(div);
+      } catch (error) {
+        console.error("Error fetching", url, error);
+      }
     }
   }
 
-  function setAlarm() {
-    if (alarmTimeInput.value) {
-      alarmTime = alarmTimeInput.value;
-      showToast(`آلارم برای ${alarmTime} ست شد !`);
-    }
-  }
-
-  function stopAlarm() {
-    alarmSound.pause();
-    alarmSound.currentTime = 0;
-    alarmTime = null;
-    showToast("آلارم قطع شد !");
-  }
-
-  setAlarmButton.addEventListener("click", setAlarm);
-  stopAlarmButton.addEventListener("click", stopAlarm);
-
-  setInterval(updateTime, 1000);
+  fetchCurrencies();
 });

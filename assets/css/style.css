@@ -17,8 +17,7 @@ body {
   justify-content: center;
   align-items: flex-start;
   gap: 30px;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../img/bg.jpg") center center no-repeat;
+  background: url("../img/bg.jpg") center center no-repeat;
   background-size: cover;
   color: white;
   -webkit-user-drag: none;
@@ -35,6 +34,11 @@ button {
 input[type="text"] {
   all: unset;
   cursor: text;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
+  display: none;
 }
 
 header {
@@ -449,7 +453,8 @@ hr {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
 }
 
 .modal-content {
@@ -521,48 +526,60 @@ hr {
   transform: scale(0.9);
 }
 
-.alarm-clock {
+#currencies {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
   text-align: center;
-  background: rgba(11, 13, 24, 0.85);
-  backdrop-filter: blur(10px);
   width: 290px;
   padding: 20px;
-  margin-top: 20px;
   border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.set-alarm {
+  background: rgba(11, 13, 24, 0.85);
+  backdrop-filter: blur(10px);
   margin-top: 20px;
 }
 
-#setAlarmButton {
-  background: #3f5294;
-  color: #fff;
-  margin-left: 10px;
+.currency {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
 }
 
-#stopAlarmButton {
-  outline: 1px solid white;
-  outline-offset: -1px;
+.currency img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-left: 5px;
 }
 
-#setAlarmButton,
-#stopAlarmButton {
-  border-radius: 200px;
-  margin-top: 20px;
-  padding: 4px 15px;
-  font-size: 16px;
-  cursor: pointer;
+.currency div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#alarmTime {
-  all: unset;
-  text-align: center;
-  padding: 5px;
-  margin-right: 5px;
-  border: 1px solid #7a80b2;
-  border-radius: 10px;
+.currency-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.name, .change {
+  font-weight: 600;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
 }
 
 #toastContainer {
@@ -573,10 +590,11 @@ hr {
 }
 
 .toast {
-  background-color: #333;
+  background: rgba(97, 6, 6, 0.5);
+  backdrop-filter: blur(10px);
   color: #fff;
   padding: 15px;
-  border-radius: 5px;
+  border-radius: 10px;
   margin-bottom: 10px;
   opacity: 0;
   transform: translateX(100%);
