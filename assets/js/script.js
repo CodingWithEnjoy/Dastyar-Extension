@@ -393,45 +393,70 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  const urls = [
-    "https://api.widgetify.ir/currencies/GRAM",
-    "https://api.widgetify.ir/currencies/USD",
-    "https://api.widgetify.ir/currencies/EUR",
-    "https://api.widgetify.ir/currencies/TRY",
-    "https://api.widgetify.ir/currencies/AED",
-  ];
+  const apiUrl =
+    "https://corsproxy.io/?url=https://api.dastyar.io/express/financial-item";
 
-  async function fetchCurrencies() {
-    const container = document.getElementById("currencies");
-    container.innerHTML = "";
+  async function fetchData() {
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
 
-    for (const url of urls) {
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
+      const tileContainer = document.getElementById("tileContainer");
+      tileContainer.innerHTML = ""; // clear old data
 
-        const div = document.createElement("div");
-        div.classList.add("currency");
-        div.innerHTML = `
-            <div>
-              <img src="${data.icon}" alt="${data.name.en}" />
+      const formattedValue = (price) => {
+        const number = Number(price);
 
-              <div class="currency-info">
-                <span class="name">${data.name.fa}:</span>
-                <span class="price"> ${data.price.toLocaleString()} تومان </span>
-              </div>
+        if (number >= 1000000) {
+          return (number / 1000000).toFixed(1) + "M";
+        } else if (number >= 1000) {
+          return (number / 1000).toFixed(1) + "K";
+        } else {
+          return number.toLocaleString();
+        }
+      };
+
+      // ✅ Only keep required items
+      const allowedKeys = [
+        "usd_btc",
+        "18ayar",
+        "sekkeh",
+        "usd",
+        "eur",
+        "gbp",
+      ];
+
+      data
+        .filter((item) => allowedKeys.includes(item.key))
+        .forEach((item) => {
+          const tile = document.createElement("div");
+          tile.className = "tile";
+
+          const changeColor =
+            item.change > 0 ? "green" : item.change < 0 ? "red" : "#fff";
+
+          const formattedPrice = formattedValue(item.price);
+          const formattedChange = Number(item.change).toFixed(2);
+
+          tile.innerHTML = `
+          <div class="tile-info">
+            <div class="tile-text">
+              <img src="https://liara-s3.dastyar.io/Img/icons/finance/${item.image}" alt="${item.title}">
+              <h3>${item.title}: </h3>
+              <p>${formattedPrice} <span>${item.currency}</span></p>
             </div>
+          </div>
+          <div class="value">
+            <div class="change" style="color: ${changeColor};">(${formattedChange}%)</div>
+          </div>
+        `;
 
-            <span class="change ${data.changePercentage >= 0 ? "green" : "red"}">
-              ${data.changePercentage >= 0 ? "+" : ""}${data.changePercentage}%
-            </span>
-          `;
-        container.appendChild(div);
-      } catch (error) {
-        console.error("Error fetching", url, error);
-      }
+          tileContainer.appendChild(tile);
+        });
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   }
 
-  fetchCurrencies();
+  fetchData();
 });

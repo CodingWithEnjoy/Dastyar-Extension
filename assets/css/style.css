@@ -526,7 +526,7 @@ hr {
   transform: scale(0.9);
 }
 
-#currencies {
+#tileContainer {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -541,7 +541,7 @@ hr {
   margin-top: 20px;
 }
 
-.currency {
+.tile {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -549,29 +549,45 @@ hr {
   gap: 10px;
 }
 
-.currency img {
+.tile img {
   width: 25px;
   height: 25px;
   border-radius: 50%;
   object-fit: cover;
-  margin-left: 5px;
+  margin-left: 2px;
 }
 
-.currency div {
+.tile-info {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.currency-info {
+.tile-text {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
 }
 
-.name, .change {
+.tile-text p {
+  color: rgb(189 182 235);
   font-weight: 600;
+}
+
+.value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.name,
+.change {
+  font-weight: 600;
+}
+
+.change {
+  direction: ltr;
 }
 
 .green {
