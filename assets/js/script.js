@@ -247,9 +247,27 @@ document.addEventListener("DOMContentLoaded", () => {
   function createBookmarkTile(url, name, emoji) {
     const tile = document.createElement("div");
     tile.classList.add("bookmark-tile");
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.classList.add("delete-bookmark");
+    deleteBtn.innerHTML = "✖"; 
+    deleteBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      deleteBookmark(url);
+      tile.remove();
+    });
+
     tile.innerHTML = `<span>${emoji}</span><p>${name}</p>`;
+    tile.appendChild(deleteBtn);
+
     tile.addEventListener("click", () => window.open(url, "_blank"));
     bookmarksContainer.appendChild(tile);
+  }
+
+  function deleteBookmark(url) {
+    let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    bookmarks = bookmarks.filter((bookmark) => bookmark.url !== url);
+    localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
   }
 
   function saveBookmark(url, name, emoji) {
@@ -417,14 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       // ✅ Only keep required items
-      const allowedKeys = [
-        "usd_btc",
-        "18ayar",
-        "sekkeh",
-        "usd",
-        "eur",
-        "gbp",
-      ];
+      const allowedKeys = ["usd_btc", "18ayar", "sekkeh", "usd", "eur", "gbp"];
 
       data
         .filter((item) => allowedKeys.includes(item.key))
@@ -460,3 +471,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
   fetchData();
 });
+
+const statusEl = document.getElementById("status");
+const pingEl = document.getElementById("ping");
+const ispEl = document.getElementById("isp");
+const ipEl = document.getElementById("ip");
+
+async function checkConnection() {
+  if (!navigator.onLine) {
+    statusEl.textContent = "وضعیت: ❌ آب قطعه";
+    pingEl.textContent = "";
+    return;
+  }
+
+  statusEl.textContent = "وضعیت: دارم تست میکنم ...";
+  pingEl.textContent = "";
+
+  const url = "https://www.cloudflare.com/cdn-cgi/trace";
+  let start = performance.now();
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    let end = performance.now();
+    let ping = Math.round(end - start);
+
+    const text = await res.text();
+
+    let ipMatch = text.match(/ip=([^\n]+)/);
+    let locMatch = text.match(/loc=([^\n]+)/);
+
+    let countryCode = locMatch ? locMatch[1] : null;
+    let countryName = countryCode
+      ? new Intl.DisplayNames(["fa"], { type: "region" }).of(countryCode)
+      : "N/A";
+
+    statusEl.textContent = "وضعیت: ✅ وصلی";
+    pingEl.innerHTML = `پینگ: <span>${ping} میلی ثانیه</span>`;
+    ispEl.innerHTML = `موقعیت مکانی: <span>${countryName}</span>`;
+    ipEl.innerHTML = `آی پی: <span>${ipMatch ? ipMatch[1] : "N/A"}</span>`;
+  } catch (err) {
+    statusEl.textContent = "وضعیت: ❌ مشکلی پیش اومده";
+    console.error(err);
+  }
+}
+
+window.addEventListener("load", checkConnection);

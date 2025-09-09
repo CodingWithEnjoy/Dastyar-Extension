@@ -71,7 +71,7 @@ hr {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 85vh;
+  height: 58vh;
   width: 290px;
   padding: 10px;
   border-radius: 15px;
@@ -444,6 +444,23 @@ hr {
   font-size: 13px;
 }
 
+.delete-bookmark {
+  position: absolute;
+  top: 5px;
+  right: 9px;
+  opacity: 0;
+  background: transparent;
+  border: none;
+  color: #ff2f2f;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.bookmark-tile:hover .delete-bookmark {
+  opacity: 1;
+}
+
 .modal {
   display: none;
   position: fixed;
@@ -531,7 +548,7 @@ hr {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
   text-align: center;
   width: 290px;
   padding: 20px;
@@ -573,6 +590,8 @@ hr {
 .tile-text p {
   color: rgb(189 182 235);
   font-weight: 600;
+  font-size: 13px;
+  margin-top: 3px;
 }
 
 .value {
@@ -625,4 +644,43 @@ hr {
 .toast.hide {
   opacity: 0;
   transform: translateX(100%);
+}
+
+.speedtest {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 20px;
+  height: 264px;
+  width: 290px;
+  padding: 15px;
+  border-radius: 15px;
+  background: rgba(11, 13, 24, 0.85);
+  backdrop-filter: blur(10px);
+  margin-top: 20px;
+}
+
+.speedtest h2 {
+  font-size: 24px;
+}
+
+.speedtest .result {
+  font-size: 15px;
+}
+
+.speedtest .result span {
+  font-weight: 700;
+  color: rgb(189 182 235);
+}
+
+#status {
+  margin-bottom: 20px;
+  font-size: 19px;
+}
+
+#ping,
+#isp,
+#ip {
+  margin-top: -10px;
 }
