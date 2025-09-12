@@ -150,8 +150,13 @@
             </svg>
           </button>
         </div>
+        <div id="searchDropdown" class="search-dropdown hidden">
+          <div class="dropdown-header"><h2>🔥 ترندها</h2></div>
+          <ul id="trendsList"></ul>
+        </div>
       </div>
-      <!-- <div id="searchResults"></div> -->
+
+      <div id="dropdownOverlay" class="dropdown-overlay hidden"></div>
 
       <div id="bookmarksSection" class="bookmarks-section">
         <div id="bookmarks" dir="rtl">
@@ -185,6 +190,8 @@
           <button id="saveBookmark">ذخیره</button>
         </div>
       </div>
+
+      <!-- <div class="slider-container" id="slider"></div> -->
     </div>
 
     <div class="col col3">
@@ -238,13 +245,13 @@
         <table id="calendarTable">
           <thead>
             <tr>
+              <th>ش</th>
               <th>ی</th>
               <th>د</th>
               <th>س</th>
               <th>چ</th>
               <th>پ</th>
               <th>ج</th>
-              <th>ش</th>
             </tr>
           </thead>
 
@@ -254,6 +261,7 @@
     </div>
 
     <script src="assets/libs/jalaali.js"></script>
+    <script src="assets/libs/swiper-bundle.min.js"></script>
     <script src="assets/js/script.js"></script>
   </body>
 </html>

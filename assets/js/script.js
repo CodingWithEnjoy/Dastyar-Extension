@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const taskBody = $("taskBody");
   const searchInput = $("searchInput");
   const searchButton = $("searchButton");
-  const searchResults = $("searchResults");
   const weatherInfo = $("weatherInfo");
   const dateTimeInfo = $("dateTimeInfo");
   const calendarTitle = $("calendarTitle");
@@ -182,28 +181,46 @@ document.addEventListener("DOMContentLoaded", () => {
     if (timeEl) timeEl.textContent = timeString;
   }
 
-  let currentMonth = new Date().getMonth();
-  let currentYear = new Date().getFullYear();
+  let currentJYear = jalaali.toJalaali(
+    new Date().getFullYear(),
+    new Date().getMonth() + 1,
+    new Date().getDate()
+  ).jy;
+  let currentJMonth =
+    jalaali.toJalaali(
+      new Date().getFullYear(),
+      new Date().getMonth() + 1,
+      new Date().getDate()
+    ).jm - 1; // 0-indexed for array
 
-  function generateCalendar(month, year) {
+  function generateJalaliCalendar(jy, jm) {
     calendarBody.innerHTML = "";
 
-    const options = { month: "long", year: "numeric" };
-    calendarTitle.textContent = new Date(year, month).toLocaleDateString(
-      "en-US",
-      options
-    );
+    const daysInMonth = jalaali.jalaaliMonthLength(jy, jm + 1); // 1-indexed
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    // Calendar title
+    calendarTitle.textContent = `${persianMonths[jm]} ${jy}`;
+
+    // First day of month in Gregorian
+    const firstDayGregorian = jalaali.toGregorian(jy, jm + 1, 1);
+    let firstDayWeek = new Date(
+      firstDayGregorian.gy,
+      firstDayGregorian.gm - 1,
+      firstDayGregorian.gd
+    ).getDay();
+    // JS: 0=Sunday, 1=Monday ... 6=Saturday
+    // Persian week starts Saturday → shift by 1
+    firstDayWeek = (firstDayWeek + 1) % 7;
 
     let date = 1;
+
     for (let i = 0; i < 6; i++) {
       const row = document.createElement("tr");
 
       for (let j = 0; j < 7; j++) {
         const cell = document.createElement("td");
-        if (i === 0 && j < firstDay) {
+
+        if (i === 0 && j < firstDayWeek) {
           cell.textContent = "";
           cell.classList.add("empty-cell");
         } else if (date > daysInMonth) {
@@ -211,37 +228,42 @@ document.addEventListener("DOMContentLoaded", () => {
           cell.classList.add("empty-cell");
         } else {
           cell.textContent = date;
-          if (
-            date === new Date().getDate() &&
-            month === new Date().getMonth() &&
-            year === new Date().getFullYear()
-          ) {
+
+          const today = jalaali.toJalaali(
+            new Date().getFullYear(),
+            new Date().getMonth() + 1,
+            new Date().getDate()
+          );
+          if (date === today.jd && jm + 1 === today.jm && jy === today.jy) {
             cell.classList.add("today");
           }
+
           date++;
         }
+
         row.appendChild(cell);
       }
+
       calendarBody.appendChild(row);
     }
   }
 
   document.getElementById("prevMonth").addEventListener("click", () => {
-    currentMonth--;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
+    currentJMonth--;
+    if (currentJMonth < 0) {
+      currentJMonth = 11;
+      currentJYear--;
     }
-    generateCalendar(currentMonth, currentYear);
+    generateJalaliCalendar(currentJYear, currentJMonth);
   });
 
   document.getElementById("nextMonth").addEventListener("click", () => {
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
+    currentJMonth++;
+    if (currentJMonth > 11) {
+      currentJMonth = 0;
+      currentJYear++;
     }
-    generateCalendar(currentMonth, currentYear);
+    generateJalaliCalendar(currentJYear, currentJMonth);
   });
 
   function createBookmarkTile(url, name, emoji) {
@@ -250,7 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-bookmark");
-    deleteBtn.innerHTML = "✖"; 
+    deleteBtn.innerHTML = "✖";
     deleteBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       deleteBookmark(url);
@@ -332,7 +354,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   searchInput.addEventListener("focus", () => {
     chrome.history.search({ text: "", maxResults: 10 }, (results) => {
-      searchResults.innerHTML = "";
       results.forEach((result) => {
         if (result.url.includes("https://www.google.com/search")) {
           const div = document.createElement("div");
@@ -343,14 +364,9 @@ document.addEventListener("DOMContentLoaded", () => {
           div.addEventListener("click", () =>
             window.open(result.url, "_blank")
           );
-          searchResults.appendChild(div);
         }
       });
     });
-  });
-
-  searchInput.addEventListener("blur", () => {
-    setTimeout(() => (searchResults.innerHTML = ""), 100);
   });
 
   addBookmarkButton.addEventListener(
@@ -390,7 +406,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadTasks();
   fetchWeather();
   loadBookmarks();
-  generateCalendar(currentMonth, currentYear);
+  generateJalaliCalendar(currentJYear, currentJMonth);
 
   var menuButton = document.getElementById("menuButton");
   var menu = document.getElementById("menu");
@@ -435,7 +451,15 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       // ✅ Only keep required items
-      const allowedKeys = ["usd_btc", "18ayar", "sekkeh", "usd", "eur", "gbp"];
+      const allowedKeys = [
+        "usd_btc",
+        "usd_eth",
+        "18ayar",
+        "sekkeh",
+        "usd",
+        "eur",
+        "gbp",
+      ];
 
       data
         .filter((item) => allowedKeys.includes(item.key))
@@ -450,17 +474,17 @@ document.addEventListener("DOMContentLoaded", () => {
           const formattedChange = Number(item.change).toFixed(2);
 
           tile.innerHTML = `
-          <div class="tile-info">
-            <div class="tile-text">
-              <img src="https://liara-s3.dastyar.io/Img/icons/finance/${item.image}" alt="${item.title}">
-              <h3>${item.title}: </h3>
-              <p>${formattedPrice} <span>${item.currency}</span></p>
+            <div class="tile-info">
+              <div class="tile-text">
+                <img src="https://liara-s3.dastyar.io/Img/icons/finance/${item.image}" alt="${item.title}">
+                <h3>${item.title}: </h3>
+                <p>${formattedPrice} <span>${item.currency}</span></p>
+              </div>
             </div>
-          </div>
-          <div class="value">
-            <div class="change" style="color: ${changeColor};">(${formattedChange}%)</div>
-          </div>
-        `;
+            <div class="value">
+              <div class="change" style="color: ${changeColor};">(${formattedChange}%)</div>
+            </div>
+          `;
 
           tileContainer.appendChild(tile);
         });
@@ -470,6 +494,60 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   fetchData();
+
+  const searchDropdown = document.getElementById("searchDropdown");
+  const dropdownOverlay = document.getElementById("dropdownOverlay");
+  const trendsList = document.getElementById("trendsList");
+
+  async function fetchTrends() {
+    try {
+      const res = await fetch(
+        "https://api.widgetify.ir/extension/searchbox?region=IR&limit=10"
+      );
+      const data = await res.json();
+      trendsList.innerHTML = "";
+
+      data.trends.forEach((trend) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#e8eaed" style="margin-right:8px; vertical-align:middle;">
+            <path d="M378.09-314.5q-111.16 0-188.33-77.17-77.17-77.18-77.17-188.33t77.17-188.33q77.17-77.17 188.33-77.17 111.15 0 188.32 77.17 77.18 77.18 77.18 188.33 0 44.48-13.52 83.12-13.53 38.64-36.57 68.16l222.09 222.33q12.67 12.91 12.67 31.94 0 19.04-12.91 31.71-12.68 12.67-31.83 12.67t-31.82-12.67L529.85-364.59q-29.76 23.05-68.64 36.57-38.88 13.52-83.12 13.52Zm0-91q72.84 0 123.67-50.83 50.83-50.82 50.83-123.67t-50.83-123.67q-50.83-50.83-123.67-50.83-72.85 0-123.68 50.83-50.82 50.82-50.82 123.67t50.82 123.67q50.83 50.83 123.68 50.83Z"/>
+          </svg>
+          
+          <div>${trend.title}</div>
+        `;
+
+        li.addEventListener("click", () => {
+          const query = encodeURIComponent(trend.title);
+          window.open(`https://www.google.com/search?q=${query}`, "_blank");
+          hideDropdown();
+        });
+
+        trendsList.appendChild(li);
+      });
+    } catch (err) {
+      console.error("Error fetching trends:", err);
+    }
+  }
+
+  function showDropdown() {
+    fetchTrends();
+    searchDropdown.classList.add("show");
+    dropdownOverlay.classList.add("show");
+  }
+
+  function hideDropdown() {
+    searchDropdown.classList.remove("show");
+    dropdownOverlay.classList.remove("show");
+  }
+
+  searchInput.addEventListener("focus", showDropdown);
+
+  dropdownOverlay.addEventListener("click", hideDropdown);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") hideDropdown();
+  });
 });
 
 const statusEl = document.getElementById("status");
@@ -515,3 +593,87 @@ async function checkConnection() {
 }
 
 window.addEventListener("load", checkConnection);
+
+async function fetchStreams() {
+  try {
+    const res = await fetch(
+      "https://corsproxy.io/?url=https://streamfa.com/api/streams/live"
+    );
+    const data = await res.json();
+
+    if (!Array.isArray(data)) {
+      console.error("Unexpected API data", data);
+      return;
+    }
+
+    // Sort by total_viewers safely
+    data.sort((a, b) => (b.total_viewers || 0) - (a.total_viewers || 0));
+
+    const streams = data.slice(0, 10);
+
+    const slider = document.getElementById("slider");
+    slider.innerHTML = "";
+
+    streams.forEach((streamer) => {
+      const firstPlatform = streamer.platforms?.[0];
+      if (!firstPlatform) return;
+
+      const slide = document.createElement("div");
+      slide.className = "slide";
+
+      slide.innerHTML = `
+        <img src="${
+          firstPlatform.thumbnail_url
+        }" class="thumbnail" alt="thumbnail">
+        <div class="streamer-name">${streamer.display_name}</div>
+        <div>👀 ${streamer.total_viewers || 0} بازدید کننده</div>
+        <a href="${firstPlatform.stream_url}" target="_blank">تماشا در ${
+        firstPlatform.platform
+      }</a>
+      `;
+      slider.appendChild(slide);
+    });
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let hasDragged = false;
+
+    slider.addEventListener("pointerdown", (e) => {
+      isDown = true;
+      hasDragged = false;
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+      slider.setPointerCapture(e.pointerId);
+    });
+
+    slider.addEventListener("pointermove", (e) => {
+      if (!isDown) return;
+      const x = e.pageX - slider.offsetLeft;
+      const walk = x - startX;
+      if (Math.abs(walk) > 5) {
+        // threshold
+        hasDragged = true;
+        slider.scrollLeft = scrollLeft - walk;
+      }
+    });
+
+    slider.addEventListener("pointerup", (e) => {
+      isDown = false;
+      slider.releasePointerCapture(e.pointerId);
+    });
+
+    slider.addEventListener("pointerleave", () => {
+      isDown = false;
+    });
+
+    // Allow clicks if it was not a drag
+    slider.addEventListener("click", (e) => {
+      if (hasDragged) e.stopImmediatePropagation(); // cancel click if dragging
+    });
+  } catch (err) {
+    console.error("Error fetching streams:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", fetchStreams);

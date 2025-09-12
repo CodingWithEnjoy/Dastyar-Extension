@@ -8,6 +8,8 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "estedad", sans-serif;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 body {
@@ -20,8 +22,6 @@ body {
   background: url("../img/bg.jpg") center center no-repeat;
   background-size: cover;
   color: white;
-  -webkit-user-drag: none;
-  user-select: none;
   overflow: hidden;
 }
 
@@ -62,8 +62,9 @@ hr {
 .col {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   margin-top: 45px;
+  height: 90%;
 }
 
 .task {
@@ -71,7 +72,7 @@ hr {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 58vh;
+  height: 60vh;
   width: 290px;
   padding: 10px;
   border-radius: 15px;
@@ -232,21 +233,24 @@ hr {
   border-radius: 15px;
   background: rgba(11, 13, 24, 0.85);
   backdrop-filter: blur(10px);
+  z-index: 1000;
 }
 
 .searchSection {
   display: flex;
   flex-direction: row;
   align-items: center;
+  z-index: 1000;
 }
 
 #searchInput {
-  width: 465px;
+  width: 485px;
   height: 25px;
   background: #181b2a;
   padding: 15px 55px;
   border-radius: 200px;
   font-size: 16px;
+  z-index: 1000;
 }
 
 #searchInput::placeholder {
@@ -263,6 +267,7 @@ hr {
   border-radius: 200px;
   margin-right: -70px;
   transition: 0.3s;
+  z-index: 1001;
 }
 
 #searchButton svg {
@@ -271,18 +276,6 @@ hr {
 
 #searchButton:active {
   transform: scale(0.9);
-}
-
-#searchResults {
-  max-height: 150px;
-  overflow-y: auto;
-  position: absolute;
-  background: #181b2a;
-  width: 400px;
-  margin-right: 100px;
-  border-radius: 10px;
-  text-align: center;
-  margin-top: 20px;
 }
 
 .search-item {
@@ -302,7 +295,7 @@ hr {
 
 .google-icon {
   margin-left: -43px;
-  z-index: 1;
+  z-index: 1001;
 }
 
 .info-section {
@@ -551,7 +544,7 @@ hr {
   gap: 20px;
   text-align: center;
   width: 290px;
-  padding: 20px;
+  padding: 15px;
   border-radius: 15px;
   background: rgba(11, 13, 24, 0.85);
   backdrop-filter: blur(10px);
@@ -683,4 +676,158 @@ hr {
 #isp,
 #ip {
   margin-top: -10px;
+}
+
+.search-dropdown,
+.dropdown-overlay {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease, visibility 0.1s ease;
+}
+
+.search-dropdown.show,
+.dropdown-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  width: 100%;
+  max-height: 450px;
+  padding: 0 20px;
+  border-radius: 15px;
+  background: rgba(11, 13, 24, 0.85);
+  color: #fff;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease, padding 0.4s ease;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+.search-dropdown.show {
+  padding: 20px;
+  opacity: 1;
+}
+
+.search-dropdown h2 {
+  font-weight: 800;
+  font-size: 24px;
+}
+
+.search-dropdown::-webkit-scrollbar {
+  background: transparent;
+  width: 7px;
+  margin-top: 20px;
+}
+
+.search-dropdown::-webkit-scrollbar-thumb {
+  background: rgb(29, 34, 65);
+  border-radius: 30px;
+}
+
+.search-dropdown::-webkit-scrollbar-button {
+  visibility: hidden;
+}
+
+.search-dropdown .dropdown-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.search-dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-dropdown li {
+  padding: 9px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.2s;
+  font-size: 14px;
+  direction: rtl;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.search-dropdown li:hover {
+  background: rgb(29, 34, 65);
+}
+
+.dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 998;
+}
+
+.slider-container {
+  overflow-x: auto;
+  display: flex;
+  gap: 10px;
+  cursor: grab;
+  width: 670px;
+  height: 239px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  background: rgba(11, 13, 24, 0.85);
+  backdrop-filter: blur(10px);
+  margin-top: 20px;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.slider-container:active {
+  cursor: grabbing;
+}
+
+.slider-container::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  flex-shrink: 0;
+  border-radius: 15px;
+  padding: 15px;
+  width: 200px;
+  scroll-snap-align: start;
+  scroll-margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: rgba(11, 13, 24, 0.4);
+  gap: 5px;
+}
+
+.thumbnail {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.streamer-name {
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
+}
+
+.slide a {
+  background: rgb(29, 34, 65);
+  padding: 3px 15px;
+  border-radius: 10px;
+}
+
+.slide a:active {
+  cursor: pointer;
 }
