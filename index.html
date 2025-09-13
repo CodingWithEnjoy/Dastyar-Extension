@@ -7,10 +7,101 @@
     <title>New Tab 🗿</title>
   </head>
   <body id="body">
-    <!-- <header></header> -->
+    <header>
+      <img src="assets/img/logo.png" alt="" class="logo" />
+
+      <button class="btn" id="openSettingsBtn">
+        <img src="assets/icons/settings.svg" alt="" />
+      </button>
+    </header>
+
+    <div class="settings-overlay" id="settingsOverlay">
+      <div class="settings-modal" id="settingsModal">
+        <div class="modal-content2">
+          <button class="close-settings-btn" id="closeSettingsBtn">×</button>
+
+          <div id="general" class="tab-pane active">
+            <h2>ویجت ها</h2>
+
+            <label>
+              تسک ها
+              <span class="switch">
+                <input type="checkbox" id="toggleBox1" checked />
+                <span class="slider"></span>
+              </span>
+            </label>
+
+            <label>
+              تست سرعت اینترنت
+              <span class="switch">
+                <input type="checkbox" id="toggleBox2" checked />
+                <span class="slider"></span>
+              </span>
+            </label>
+
+            <label>
+              استریمر های آنلاین
+              <span class="switch">
+                <input type="checkbox" id="toggleBox3" checked />
+                <span class="slider"></span>
+              </span>
+            </label>
+          </div>
+
+          <div id="appearance" class="tab-pane">
+            <h2>ظاهر افزونه</h2>
+
+            <div class="color-picker">
+              <div
+                class="color-option"
+                data-color="rgba(11, 13, 24, 0.85)"
+                style="background: rgba(11, 13, 24, 0.85)"
+              ></div>
+              <div
+                class="color-option"
+                data-color="rgba(11, 24, 13, 0.85)"
+                style="background: rgba(11, 24, 13, 0.85)"
+              ></div>
+              <div
+                class="color-option"
+                data-color="rgba(19, 11, 24, 0.85)"
+                style="background: rgba(19, 11, 24, 0.85)"
+              ></div>
+              <div
+                class="color-option"
+                data-color="rgba(23, 24, 11, 0.85)"
+                style="background: rgba(23, 24, 11, 0.85)"
+              ></div>
+              <div
+                class="color-option"
+                data-color="rgba(11, 13, 24, 0.85)"
+                style="background: rgba(11, 13, 24, 0.85)"
+              ></div>
+            </div>
+          </div>
+
+          <div id="notifications" class="tab-pane">
+            <h2>Notifications</h2>
+            <p>Set up your notification preferences here.</p>
+          </div>
+        </div>
+
+        <div class="modal-sidebar">
+          <button class="tab-btn active" data-tab="general">
+            ویجت ها <img src="assets/icons/sliders.svg" alt="" />
+          </button>
+          <button class="tab-btn" data-tab="appearance">
+            تم <img src="assets/icons/moon.svg" alt="" />
+          </button>
+          <button class="tab-btn" data-tab="notifications">
+            Notifications
+          </button>
+        </div>
+      </div>
+    </div>
 
     <div class="col col1">
-      <div class="task">
+      <div class="task" id="task">
         <div class="taskHeader">
           <h1>دست نویس</h1>
           <button id="blurButton">
@@ -92,7 +183,7 @@
         </div>
       </div>
 
-      <div class="speedtest">
+      <div class="speedtest" id="speedtest">
         <h2>تست سرعت اینترنت</h2>
 
         <div class="result" id="status">وضعیت: منتظرم ...</div>
@@ -191,7 +282,7 @@
         </div>
       </div>
 
-      <!-- <div class="slider-container" id="slider"></div> -->
+      <div class="slider-container" id="slider"></div>
     </div>
 
     <div class="col col3">
@@ -261,7 +352,6 @@
     </div>
 
     <script src="assets/libs/jalaali.js"></script>
-    <script src="assets/libs/swiper-bundle.min.js"></script>
     <script src="assets/js/script.js"></script>
   </body>
 </html>

@@ -191,25 +191,22 @@ document.addEventListener("DOMContentLoaded", () => {
       new Date().getFullYear(),
       new Date().getMonth() + 1,
       new Date().getDate()
-    ).jm - 1; // 0-indexed for array
+    ).jm - 1;
 
   function generateJalaliCalendar(jy, jm) {
     calendarBody.innerHTML = "";
 
-    const daysInMonth = jalaali.jalaaliMonthLength(jy, jm + 1); // 1-indexed
+    const daysInMonth = jalaali.jalaaliMonthLength(jy, jm + 1);
 
-    // Calendar title
     calendarTitle.textContent = `${persianMonths[jm]} ${jy}`;
 
-    // First day of month in Gregorian
     const firstDayGregorian = jalaali.toGregorian(jy, jm + 1, 1);
     let firstDayWeek = new Date(
       firstDayGregorian.gy,
       firstDayGregorian.gm - 1,
       firstDayGregorian.gd
     ).getDay();
-    // JS: 0=Sunday, 1=Monday ... 6=Saturday
-    // Persian week starts Saturday → shift by 1
+
     firstDayWeek = (firstDayWeek + 1) % 7;
 
     let date = 1;
@@ -436,7 +433,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
 
       const tileContainer = document.getElementById("tileContainer");
-      tileContainer.innerHTML = ""; // clear old data
+      tileContainer.innerHTML = "";
 
       const formattedValue = (price) => {
         const number = Number(price);
@@ -450,7 +447,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       };
 
-      // ✅ Only keep required items
       const allowedKeys = [
         "usd_btc",
         "usd_eth",
@@ -606,7 +602,6 @@ async function fetchStreams() {
       return;
     }
 
-    // Sort by total_viewers safely
     data.sort((a, b) => (b.total_viewers || 0) - (a.total_viewers || 0));
 
     const streams = data.slice(0, 10);
@@ -652,7 +647,6 @@ async function fetchStreams() {
       const x = e.pageX - slider.offsetLeft;
       const walk = x - startX;
       if (Math.abs(walk) > 5) {
-        // threshold
         hasDragged = true;
         slider.scrollLeft = scrollLeft - walk;
       }
@@ -667,9 +661,8 @@ async function fetchStreams() {
       isDown = false;
     });
 
-    // Allow clicks if it was not a drag
     slider.addEventListener("click", (e) => {
-      if (hasDragged) e.stopImmediatePropagation(); // cancel click if dragging
+      if (hasDragged) e.stopImmediatePropagation();
     });
   } catch (err) {
     console.error("Error fetching streams:", err);
@@ -677,3 +670,147 @@ async function fetchStreams() {
 }
 
 document.addEventListener("DOMContentLoaded", fetchStreams);
+
+const taskClass = document.querySelector(".task");
+const col = document.querySelector(".col");
+
+function scaleForLaptopScreen() {
+  const dpr = window.devicePixelRatio || 1;
+
+  if (dpr >= 1.25) {
+    document.body.style.transform = "scale(0.8)";
+    document.body.style.transformOrigin = "top center";
+    if (taskClass) {
+      taskClass.style.height = "125vh";
+    }
+    if (col) {
+      col.style.height = "110%";
+    }
+  } else {
+    document.body.style.transform = "scale(1)";
+    document.body.style.width = "100%";
+  }
+}
+
+window.addEventListener("load", scaleForLaptopScreen);
+window.addEventListener("resize", scaleForLaptopScreen);
+
+const openSettingsBtn = document.getElementById("openSettingsBtn");
+const closeSettingsBtn = document.getElementById("closeSettingsBtn");
+const settingsOverlay = document.getElementById("settingsOverlay");
+const settingsModal = document.getElementById("settingsModal");
+const tabButtons = document.querySelectorAll(".tab-btn");
+const tabPanes = document.querySelectorAll(".tab-pane");
+
+const box1 = document.getElementById("task");
+const box2 = document.getElementById("speedtest");
+const box3 = document.getElementById("slider");
+const toggleBox1 = document.getElementById("toggleBox1");
+const toggleBox2 = document.getElementById("toggleBox2");
+const toggleBox3 = document.getElementById("toggleBox3");
+
+function saveSetting(key, value) {
+  localStorage.setItem(key, value);
+}
+
+function loadBooleanSetting(key, defaultValue) {
+  const value = localStorage.getItem(key);
+  if (value === null) return defaultValue;
+  return value === "true";
+}
+
+function loadSetting(key, defaultValue) {
+  const value = localStorage.getItem(key);
+  return value !== null ? value : defaultValue;
+}
+
+function applySettings() {
+  const showBox1 = loadBooleanSetting("showBox1", true);
+  const showBox2 = loadBooleanSetting("showBox2", true);
+  const showBox3 = loadBooleanSetting("showBox3", true);
+  const themeColor = loadSetting("themeColor", "rgba(11, 13, 24, 0.85)");
+
+  toggleBox1.checked = showBox1;
+  toggleBox2.checked = showBox2;
+  toggleBox3.checked = showBox3;
+
+  box1.style.display = showBox1 ? "flex" : "none";
+  box2.style.display = showBox2 ? "flex" : "none";
+  box3.style.display = showBox3 ? "flex" : "none";
+
+  document.documentElement.style.setProperty("--theme-color", themeColor);
+
+  document.querySelectorAll(".color-option").forEach((opt) => {
+    opt.classList.toggle("active", opt.dataset.color === themeColor);
+  });
+}
+
+applySettings();
+
+toggleBox1.addEventListener("change", () => {
+  const state = toggleBox1.checked;
+  box1.style.display = state ? "flex" : "none";
+  saveSetting("showBox1", state);
+});
+
+toggleBox2.addEventListener("change", () => {
+  const state = toggleBox2.checked;
+  box2.style.display = state ? "flex" : "none";
+  saveSetting("showBox2", state);
+});
+
+toggleBox3.addEventListener("change", () => {
+  const state = toggleBox3.checked;
+  box3.style.display = state ? "flex" : "none";
+  saveSetting("showBox3", state);
+});
+
+const colorOptions = document.querySelectorAll(".color-option");
+colorOptions.forEach((opt) => {
+  opt.addEventListener("click", () => {
+    const color = opt.dataset.color;
+    document.documentElement.style.setProperty("--theme-color", color);
+    saveSetting("themeColor", color);
+
+    colorOptions.forEach((o) => o.classList.remove("active"));
+    opt.classList.add("active");
+  });
+});
+
+openSettingsBtn.addEventListener("click", () => {
+  settingsOverlay.classList.remove("closing");
+  settingsOverlay.style.display = "flex";
+  settingsOverlay.classList.add("active");
+  settingsModal.classList.remove("closing");
+});
+
+function closeSettings() {
+  settingsModal.classList.add("closing");
+  settingsOverlay.classList.add("closing");
+  settingsOverlay.classList.remove("active");
+
+  settingsOverlay.addEventListener(
+    "animationend",
+    () => {
+      if (settingsOverlay.classList.contains("closing")) {
+        settingsOverlay.style.display = "none";
+        settingsOverlay.classList.remove("closing");
+        settingsModal.classList.remove("closing");
+      }
+    },
+    { once: true }
+  );
+}
+closeSettingsBtn.addEventListener("click", closeSettings);
+settingsOverlay.addEventListener("click", (e) => {
+  if (e.target === settingsOverlay) closeSettings();
+});
+
+tabButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    tabButtons.forEach((b) => b.classList.remove("active"));
+    tabPanes.forEach((p) => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
+  });
+});
