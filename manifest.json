@@ -6,5 +6,9 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "permissions": ["scripting", "activeTab", "tabs", "history", "storage"]
+  "permissions": ["storage", "identity"],
+  "oauth2": {
+    "client_id": "267895360113-p0qlitf2o0n8dkt7lvc7cqclqgbv5jte.apps.googleusercontent.com",
+    "scopes": ["profile", "email"]
+  }
 }

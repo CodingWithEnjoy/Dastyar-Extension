@@ -10,9 +10,15 @@
     <header>
       <img src="assets/img/logo.png" alt="" class="logo" />
 
-      <button class="btn" id="openSettingsBtn">
-        <img src="assets/icons/settings.svg" alt="" />
-      </button>
+      <div id="userInfoContainer">
+        <button class="btn" id="openSettingsBtn">
+          <img src="assets/icons/settings.svg" alt="Settings" />
+        </button>
+        <div id="userInfo"></div>
+        <div id="userPopup" class="popup">
+          <p id="greeting"></p>
+        </div>
+      </div>
     </header>
 
     <div class="settings-overlay" id="settingsOverlay">

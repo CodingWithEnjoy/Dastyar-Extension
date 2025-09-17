@@ -671,30 +671,6 @@ async function fetchStreams() {
 
 document.addEventListener("DOMContentLoaded", fetchStreams);
 
-const taskClass = document.querySelector(".task");
-const col = document.querySelector(".col");
-
-function scaleForLaptopScreen() {
-  const dpr = window.devicePixelRatio || 1;
-
-  if (dpr >= 1.25) {
-    document.body.style.transform = "scale(0.8)";
-    document.body.style.transformOrigin = "top center";
-    if (taskClass) {
-      taskClass.style.height = "125vh";
-    }
-    if (col) {
-      col.style.height = "110%";
-    }
-  } else {
-    document.body.style.transform = "scale(1)";
-    document.body.style.width = "100%";
-  }
-}
-
-window.addEventListener("load", scaleForLaptopScreen);
-window.addEventListener("resize", scaleForLaptopScreen);
-
 const openSettingsBtn = document.getElementById("openSettingsBtn");
 const closeSettingsBtn = document.getElementById("closeSettingsBtn");
 const settingsOverlay = document.getElementById("settingsOverlay");
@@ -813,4 +789,73 @@ tabButtons.forEach((btn) => {
     btn.classList.add("active");
     document.getElementById(btn.dataset.tab).classList.add("active");
   });
+});
+
+const userInfoDiv = document.getElementById("userInfo");
+const loginBtn = document.getElementById("loginBtn");
+const userPopup = document.getElementById("userPopup");
+const greeting = document.getElementById("greeting");
+
+async function fetchAndDisplayUser(token) {
+  try {
+    const res = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const user = await res.json();
+
+    userInfoDiv.innerHTML = `
+            <img src="${user.picture}" alt="Avatar">
+        `;
+
+    userInfoDiv.addEventListener("click", (e) => {
+      greeting.textContent = `${user.name} خوش اومدی 🤙`;
+      userPopup.classList.toggle("show");
+    });
+  } catch (err) {
+    console.error("Failed to fetch user info:", err);
+    userInfoDiv.innerText = "Failed to fetch user info.";
+  }
+}
+
+function loginWithGoogle() {
+  if (!chrome.identity) {
+    console.error("chrome.identity is undefined. Must run inside extension.");
+    userInfoDiv.innerText = "Extension context required.";
+    return;
+  }
+
+  chrome.identity.getAuthToken({ interactive: false }, async (token) => {
+    if (chrome.runtime.lastError || !token) {
+      console.warn("Silent login failed:", chrome.runtime.lastError);
+      loginBtn.style.display = "block";
+      loginBtn.addEventListener("click", () => {
+        chrome.identity.getAuthToken(
+          { interactive: true },
+          async (tokenInteractive) => {
+            if (chrome.runtime.lastError || !tokenInteractive) {
+              console.error(
+                "Interactive login failed:",
+                chrome.runtime.lastError
+              );
+              userInfoDiv.innerText = "Login failed.";
+              return;
+            }
+            loginBtn.style.display = "none";
+            await fetchAndDisplayUser(tokenInteractive);
+          }
+        );
+      });
+      return;
+    }
+
+    await fetchAndDisplayUser(token);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", loginWithGoogle);
+
+document.addEventListener("click", (e) => {
+  if (!userInfoDiv.contains(e.target) && !userPopup.contains(e.target)) {
+    userPopup.classList.remove("show");
+  }
 });

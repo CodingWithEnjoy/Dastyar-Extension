@@ -60,7 +60,7 @@ header {
   height: 90%;
   position: fixed;
   top: 45px;
-  right: 30px;
+  right: 20px;
   padding: 20px;
   background: var(--theme-color);
   backdrop-filter: blur(10px);
@@ -69,6 +69,7 @@ header {
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
+  z-index: 100;
 }
 
 header img {
@@ -95,7 +96,7 @@ header .btn:active {
 }
 
 header .btn img {
-  width: 25px;
+  width: 30px;
 }
 
 .col {
@@ -578,7 +579,7 @@ header .btn img {
 
 #tileContainer {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   gap: 20px;
@@ -589,6 +590,25 @@ header .btn img {
   background: var(--theme-color);
   backdrop-filter: blur(10px);
   margin-top: 20px;
+  height: 20vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#tileContainer::-webkit-scrollbar {
+  background: transparent;
+  width: 7px;
+  margin-top: 20px;
+}
+
+#tileContainer::-webkit-scrollbar-thumb {
+  background: rgb(29, 34, 65);
+  border-radius: 30px;
+}
+
+#tileContainer::-webkit-scrollbar-button {
+  visibility: hidden;
+  height: 5px;
 }
 
 .tile {
@@ -1112,4 +1132,48 @@ input:checked + .slider:before {
 
 .color-option.active {
   border: 3px solid black;
+}
+
+#userInfoContainer {
+  position: relative;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#userInfo img {
+  border-radius: 10px;
+  cursor: pointer;
+  width: 50px;
+}
+
+.popup {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: rgba(11, 13, 24, 0.95);
+  border: 1px solid rgb(34, 40, 75);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  z-index: 9999;
+  width: 250px;
+  height: 50px;
+  opacity: 0;
+  transform: scale(0.8);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: larger;
+}
+
+.popup.show {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
 }
