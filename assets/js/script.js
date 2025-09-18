@@ -433,7 +433,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
 
       const tileContainer = document.getElementById("tileContainer");
+      const tileWrapper = document.createElement("div");
+      tileWrapper.className = "tile-wrapper";
       tileContainer.innerHTML = "";
+      tileContainer.appendChild(tileWrapper);
 
       const formattedValue = (price) => {
         const number = Number(price);
@@ -457,6 +460,38 @@ document.addEventListener("DOMContentLoaded", () => {
         "gbp",
       ];
 
+      const tiles = data
+        .filter((item) => allowedKeys.includes(item.key))
+        .map((item) => {
+          const tile = document.createElement("div");
+          tile.className = "tile";
+
+          const changeColor =
+            item.change > 0 ? "green" : item.change < 0 ? "red" : "#fff";
+
+          const formattedPrice = formattedValue(item.price);
+          const formattedChange = Number(item.change).toFixed(2);
+
+          tile.innerHTML = `
+      <div class="tile-info">
+        <div class="tile-text">
+          <img src="https://liara-s3.dastyar.io/Img/icons/finance/${item.image}" alt="${item.title}">
+          <h3>${item.title}: </h3>
+          <p>${formattedPrice} <span>${item.currency}</span></p>
+        </div>
+      </div>
+      <div class="value">
+        <div class="change" style="color: ${changeColor};">(${formattedChange}%)</div>
+      </div>
+    `;
+
+          return tile;
+        });
+
+      // Append tiles twice for seamless loop
+      tiles.forEach((t) => tileWrapper.appendChild(t.cloneNode(true)));
+      tiles.forEach((t) => tileWrapper.appendChild(t.cloneNode(true)));
+
       data
         .filter((item) => allowedKeys.includes(item.key))
         .forEach((item) => {
@@ -470,19 +505,19 @@ document.addEventListener("DOMContentLoaded", () => {
           const formattedChange = Number(item.change).toFixed(2);
 
           tile.innerHTML = `
-            <div class="tile-info">
-              <div class="tile-text">
-                <img src="https://liara-s3.dastyar.io/Img/icons/finance/${item.image}" alt="${item.title}">
-                <h3>${item.title}: </h3>
-                <p>${formattedPrice} <span>${item.currency}</span></p>
-              </div>
-            </div>
-            <div class="value">
-              <div class="change" style="color: ${changeColor};">(${formattedChange}%)</div>
-            </div>
-          `;
+      <div class="tile-info">
+        <div class="tile-text">
+          <img src="https://liara-s3.dastyar.io/Img/icons/finance/${item.image}" alt="${item.title}">
+          <h3>${item.title}: </h3>
+          <p>${formattedPrice} <span>${item.currency}</span></p>
+        </div>
+      </div>
+      <div class="value">
+        <div class="change" style="color: ${changeColor};">(${formattedChange}%)</div>
+      </div>
+    `;
 
-          tileContainer.appendChild(tile);
+          tileWrapper.appendChild(tile);
         });
     } catch (error) {
       console.error("Error fetching data:", error);
