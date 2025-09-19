@@ -879,19 +879,17 @@ header .btn img {
   flex-shrink: 0;
   border-radius: 15px;
   padding: 15px;
-  width: 200px;
   scroll-snap-align: start;
   scroll-margin: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
   background: rgba(11, 13, 24, 0.4);
   gap: 5px;
 }
 
 .thumbnail {
-  width: 100%;
+  width: 100px;
   border-radius: 10px;
 }
 
@@ -909,6 +907,13 @@ header .btn img {
 
 .slide a:active {
   cursor: pointer;
+}
+
+.slide div {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .settings-overlay {
@@ -1195,4 +1200,37 @@ input:checked + .slider:before {
   opacity: 1;
   transform: scale(1);
   pointer-events: auto;
+}
+
+.google-services {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.google-service {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background: var(--theme-color);
+  backdrop-filter: blur(10px);
+  width: 20%;
+  padding: 15px 10px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 15px;
+}
+
+.google-service img {
+  height: 30px;
+  width: 30px;
+  background: #3f5294;
+  padding: 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

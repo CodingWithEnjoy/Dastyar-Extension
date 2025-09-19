@@ -655,11 +655,13 @@ async function fetchStreams() {
         <img src="${
           firstPlatform.thumbnail_url
         }" class="thumbnail" alt="thumbnail">
-        <div class="streamer-name">${streamer.display_name}</div>
-        <div>👀 ${streamer.total_viewers || 0} بازدید کننده</div>
-        <a href="${firstPlatform.stream_url}" target="_blank">تماشا در ${
+        <div>
+          <div class="streamer-name">${streamer.display_name}</div>
+          <div>👀 ${streamer.total_viewers || 0}</div>
+          <a href="${firstPlatform.stream_url}" target="_blank">تماشا در ${
         firstPlatform.platform
       }</a>
+        </div>
       `;
       slider.appendChild(slide);
     });
@@ -716,9 +718,13 @@ const tabPanes = document.querySelectorAll(".tab-pane");
 const box1 = document.getElementById("task");
 const box2 = document.getElementById("speedtest");
 const box3 = document.getElementById("slider");
+const box4 = document.getElementById("google-services");
+const box5 = document.getElementById("tileContainer");
 const toggleBox1 = document.getElementById("toggleBox1");
 const toggleBox2 = document.getElementById("toggleBox2");
 const toggleBox3 = document.getElementById("toggleBox3");
+const toggleBox4 = document.getElementById("toggleBox4");
+const toggleBox5 = document.getElementById("toggleBox5");
 
 function saveSetting(key, value) {
   localStorage.setItem(key, value);
@@ -739,15 +745,21 @@ function applySettings() {
   const showBox1 = loadBooleanSetting("showBox1", true);
   const showBox2 = loadBooleanSetting("showBox2", true);
   const showBox3 = loadBooleanSetting("showBox3", true);
+  const showBox4 = loadBooleanSetting("showBox4", true);
+  const showBox5 = loadBooleanSetting("showBox5", true);
   const themeColor = loadSetting("themeColor", "rgba(11, 13, 24, 0.85)");
 
   toggleBox1.checked = showBox1;
   toggleBox2.checked = showBox2;
   toggleBox3.checked = showBox3;
+  toggleBox4.checked = showBox4;
+  toggleBox5.checked = showBox5;
 
   box1.style.display = showBox1 ? "flex" : "none";
   box2.style.display = showBox2 ? "flex" : "none";
   box3.style.display = showBox3 ? "flex" : "none";
+  box4.style.display = showBox4 ? "flex" : "none";
+  box5.style.display = showBox5 ? "flex" : "none";
 
   document.documentElement.style.setProperty("--theme-color", themeColor);
 
@@ -774,6 +786,18 @@ toggleBox3.addEventListener("change", () => {
   const state = toggleBox3.checked;
   box3.style.display = state ? "flex" : "none";
   saveSetting("showBox3", state);
+});
+
+toggleBox4.addEventListener("change", () => {
+  const state = toggleBox4.checked;
+  box4.style.display = state ? "flex" : "none";
+  saveSetting("showBox4", state);
+});
+
+toggleBox5.addEventListener("change", () => {
+  const state = toggleBox5.checked;
+  box5.style.display = state ? "flex" : "none";
+  saveSetting("showBox5", state);
 });
 
 const colorOptions = document.querySelectorAll(".color-option");
