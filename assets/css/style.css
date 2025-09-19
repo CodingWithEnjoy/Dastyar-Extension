@@ -23,7 +23,7 @@ body {
   justify-content: center;
   align-items: flex-start;
   gap: 30px;
-  background: url("../img/bg.jpg") center center no-repeat;
+  background: url("../background/bg1.jpg") center center no-repeat;
   background-size: cover;
   color: white;
   overflow: hidden;
@@ -1233,4 +1233,37 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.background-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.background-options img {
+  width: 100px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, border 0.2s;
+}
+
+.background-options img:hover {
+  transform: scale(1.05);
+  border: 2px solid #fff;
+}
+
+.color-thumb {
+  width: 100px;
+  height: 60px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, border 0.2s;
+}
+
+.color-thumb:hover {
+  transform: scale(1.05);
+  border: 2px solid #fff;
 }

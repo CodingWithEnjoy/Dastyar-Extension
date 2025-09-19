@@ -579,6 +579,82 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") hideDropdown();
   });
+
+  const backgroundOptionsDiv = document.getElementById("backgroundOptions");
+
+  function saveBackground(image) {
+    localStorage.setItem("backgroundImage", image);
+    applyBackground(image);
+  }
+
+  function applyBackground(image, color) {
+    if (image) {
+      document.body.style.background = `url("assets/background/${image}") center center / cover no-repeat`;
+    } else if (color) {
+      document.body.style.background = color;
+    }
+  }
+
+  function loadBackground() {
+    const savedImage = localStorage.getItem("backgroundImage");
+    const savedColor = localStorage.getItem("backgroundColor");
+
+    if (savedImage) {
+      applyBackground(savedImage, null);
+    } else if (savedColor) {
+      applyBackground(null, savedColor);
+    }
+  }
+
+  function loadBackgroundOptions() {
+    // Predefined background images
+    const images = ["bg1.jpg", "bg2.jpg", "bg3.jpg", "bg4.jpg"];
+
+    // Predefined solid colors
+    const colors = [
+      "#1e1e1e", // dark gray
+      "#0d47a1", // blue
+      "#4caf50", // green
+      "#e91e63", // pink
+      "#ff9800", // orange
+      "#ffffff", // white
+    ];
+
+    backgroundOptionsDiv.innerHTML = "";
+
+    // Image backgrounds
+    images.forEach((img) => {
+      const imgEl = document.createElement("img");
+      imgEl.src = `assets/background/${img}`;
+      imgEl.classList.add("background-thumb");
+
+      imgEl.addEventListener("click", () => {
+        localStorage.setItem("backgroundImage", img);
+        localStorage.removeItem("backgroundColor"); // clear color if image is chosen
+        applyBackground(img, null);
+      });
+
+      backgroundOptionsDiv.appendChild(imgEl);
+    });
+
+    // Color backgrounds
+    colors.forEach((color) => {
+      const colorDiv = document.createElement("div");
+      colorDiv.classList.add("color-thumb");
+      colorDiv.style.background = color;
+
+      colorDiv.addEventListener("click", () => {
+        localStorage.setItem("backgroundColor", color);
+        localStorage.removeItem("backgroundImage"); // clear image if color is chosen
+        applyBackground(null, color);
+      });
+
+      backgroundOptionsDiv.appendChild(colorDiv);
+    });
+  }
+
+  loadBackgroundOptions();
+  loadBackground();
 });
 
 const statusEl = document.getElementById("status");
